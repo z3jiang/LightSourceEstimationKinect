@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="recorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="surfacenormal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lsestimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="openni_grabber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pcl\segmentation\region_growing_rgb.cpp">
+      <Filter>Source Files\pcl\segmentation</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0CF8975F-01EB-45E7-B036-B1AAFEEE9B0A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pcl">
+      <UniqueIdentifier>{ac82e50e-59a7-48dd-8595-08b691b5f7a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pcl\segmentation">
+      <UniqueIdentifier>{3e5da72c-037a-4fea-bc6e-2b7ee2b305ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pcl\segmentation\impl">
+      <UniqueIdentifier>{31323eb7-69b7-47f9-ba49-d2f93bc259ad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="debug.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="recorder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="surfacenormal.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lsestimation.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="openni_grabber.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pcl\segmentation\region_growing_rgb.h">
+      <Filter>Source Files\pcl\segmentation</Filter>
+    </ClInclude>
+    <ClInclude Include="pcl\segmentation\impl\region_growing_rgb.hpp">
+      <Filter>Source Files\pcl\segmentation\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="pcl\segmentation\region_growing.h">
+      <Filter>Source Files\pcl\segmentation</Filter>
+    </ClInclude>
+    <ClInclude Include="pcl\segmentation\impl\region_growing.hpp">
+      <Filter>Source Files\pcl\segmentation\impl</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
