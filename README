@@ -1,0 +1,38 @@
+Copyright (c) 2013, Zhongshi (Sam) Jiang & Shayan Rezvankhah
+All rights reserved.
+
+All materials are LGPL v2.1 licensed. The license is here:
+http://www.gnu.org/licenses/lgpl-2.1.html
+====================================================================
+
+
+Light Source Estimation using Kinect
+for course project COMP558
+by
+Zhongshi (Sam) Jiang and
+Shayan Rezvankhah
+
+Overview:
+
+- PCL & OpenNI based implementation
+- data available at:
+  https://drive.google.com/folderview?id=0Bz25WYV9M32URjNlTWRPY25MdHc&usp=sharing
+- high level algorithm:
+  o capture data from kinect
+  o filter for feasible / optimal points
+  o point cloud construction
+  o estimate normal
+  o segmentation based on color
+  o segment selection
+  o estimate light source
+
+Building:
+
+This is rather difficult. The VS project files are semi CMake generated and hand
+tweaked. The best way to build this is to hand edit the VS project files and
+update the related include, library folder locations. Perhaps in a future update,
+a proper CMakeLists.txt will be included.
+
+(And for now, please don't mind the name of the bin being `openni_grabber'. It's
+the starting point of the project.).
+  
