@@ -4,10 +4,6 @@
 
 using namespace std;
 
-LSEstimation::LSEstimation(void)
-{
-}
-
 
 LSEstimation::~LSEstimation(void)
 {
@@ -131,17 +127,25 @@ Eigen::Vector3f LSEstimation::run(PointCloudCPtr cloud, PointCloudNormalPtr norm
 	vector< vector<int> > indicies;
 	getSeg(cloud, normals, indicies);
 
+	ofstream ofile("0.results.txt");
+
 	DEBUG("starting estimations " << endl);
 	Eigen::Vector3f total = Eigen::Vector3f::Zero();
 	for (size_t i=0; i<indicies.size(); i++)
 	{
 		Eigen::Vector3f ls = estimateLS(cloud, normals, indicies[i]);
+		ofile << "Segment " << i << endl;
+		ofile << ls << endl << endl;
+
 		total = total + ls / indicies.size();
 	}
 
 	DEBUG("combined: " << total << endl);
 	total.normalize();
 	DEBUG("final: " << total << endl);
+	ofile << "final: " << endl;
+	ofile << total << endl;
+	ofile.close();
 	cin.get();
 	exit(0);
 }
@@ -152,38 +156,64 @@ Eigen::Vector3f LSEstimation::estimateLS(
 {
 	size_t n = indicies.size();
 	DEBUG("estimating LS location from " << n << " points" << endl);
+	DEBUG("ambient cancellation: " << _ac << endl);
+	const static int limit = 7000;
+	int times = indicies.size()/limit;
 
+	Eigen::Vector3f ret = Eigen::Vector3f::Zero();
 
-	const static int limit = 6000;
-	if (n > limit)
+	for (int i=0; i<=times; i++)
 	{
-		std::random_shuffle(indicies.begin(), indicies.end());
-		indicies.resize(limit);
-		sort(indicies.begin(), indicies.end());
+		DEBUG("subsample iteration " << i << "/" << times << endl);
+		// too big, sub sample
+		vector<int> current = indicies;
+		std::random_shuffle(current.begin(), current.end());
+		current.resize(limit);
+		sort(current.begin(), current.end());
 		DEBUG("resizing down to " << limit << endl);
-
 		n = limit;
+
+		Eigen::MatrixX3f A(n, 3);
+		Eigen::VectorXf b(n);
+		
+		float totalR = 0;
+
+		for (size_t i=0; i<n; i++)
+		{
+			pcl::PointNormal n =  normals->at(indicies[i]);
+			A(i, 0) =  n.normal[0];
+			A(i, 1) =  n.normal[1];
+			A(i, 2) =  n.normal[2];
+
+			Point p = cloud->at(indicies[i]);
+			float r =  0.2126*p.r + 0.7152*p.g + 0.0722*p.b;
+			totalR += r;
+			b(i) = r + n.normal[0] * p.x + n.normal[1] * p.y + n.normal[2] * p.z;
+
+		}
+
+		if (_ac)
+		{
+			for (size_t i=0; i<n; i++)
+			{
+				b(i) -= totalR/n*0.05;
+				if (b(i) < 0)
+				{
+					b(i) = 0;
+				}
+			}
+		}
+
+		DEBUG("SVD..." << endl);
+		Eigen::JacobiSVD<Eigen::MatrixX3f> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+		Eigen::VectorXf L = svd.solve(b);
+		L.normalize();
+
+		ret += L;
 	}
 
-	Eigen::MatrixX3f A(n, 3);
-	Eigen::VectorXf b(n);
+	ret.normalize();
 
-	for (size_t i=0; i<n; i++)
-	{
-		pcl::PointNormal n =  normals->at(indicies[i]);
-		A(i, 0) =  n.normal[0];
-		A(i, 1) =  n.normal[1];
-		A(i, 2) =  n.normal[2];
-
-		Point p = cloud->at(indicies[i]);
-		float r =  0.2126*p.r + 0.7152*p.g + 0.0722*p.b;
-		b(i) = r + n.normal[0] * p.x + n.normal[1] * p.y + n.normal[2] * p.z;
-	}
-
-	Eigen::JacobiSVD<Eigen::MatrixX3f> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
-	Eigen::VectorXf L = svd.solve(b);
-	L.normalize();
-
-	DEBUG("estimated ls: " << endl << L << endl << endl);
-	return L;
+	DEBUG("estimated ls: " << endl << ret << endl << endl);
+	return ret;
 }

@@ -6,7 +6,7 @@
 class LSEstimation
 {
 public:
-	LSEstimation(void);
+	LSEstimation(bool enableAmbientCancellation) : _ac(enableAmbientCancellation) {};
 	~LSEstimation(void);
 
 	Eigen::Vector3f run(PointCloudCPtr cloud, PointCloudNormalPtr normals);
@@ -18,5 +18,7 @@ private:
 
 	Eigen::Vector3f estimateLS(
 		PointCloudCPtr cloud, PointCloudNormalCPtr normals, vector<int> &indicies);
+
+	bool _ac;
 };
 

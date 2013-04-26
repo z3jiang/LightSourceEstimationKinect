@@ -26,6 +26,7 @@ int realmain(int ac, char** av)
 			("n", "calculate surface normal")
 			("e", "estimate lightsource")
 			("v", "view kinect data online")
+			("ac", "whether to enable ambient cancellation")
 			;
 
 		po::variables_map vm;
@@ -62,7 +63,7 @@ int realmain(int ac, char** av)
 			DEBUG("estimating lightsource" << endl);
 			PointCloudPtr points = Loader().load();
 			PointCloudNormalPtr normals = SurfaceNormal().run(points);
-			Eigen::Vector3f ls = LSEstimation().run(points, normals);
+			Eigen::Vector3f ls = LSEstimation(vm.count("ac")).run(points, normals);
 			cout << "light source: " << ls << endl;
 		}
 		else if (vm.count("v"))
